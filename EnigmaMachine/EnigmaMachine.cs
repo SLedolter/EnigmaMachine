@@ -11,6 +11,7 @@ namespace EnigmaMachine {
 
     public EnigmaMachine(string name) {
       this.Name = name;
+      this.rotor1 = new Cylinder("Roto1", 1, EnigmaConfig.CYLINDER_1);
     }
 
     public char Encoder(char original) {

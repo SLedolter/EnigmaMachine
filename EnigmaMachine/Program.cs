@@ -53,12 +53,11 @@ namespace EnigmaMachine
     }
 
     static void EncodeLetters() {
-      char input;
+      ConsoleKey input;
 
       do {
-        input = (char)Console.Read();
-        Console.Write(enigmaMachine.Encoder(input));
-      } while (input != '-');
+        input = Console.ReadKey().Key;
+      } while (input != ConsoleKey.OemMinus);
     }
   }
 }
