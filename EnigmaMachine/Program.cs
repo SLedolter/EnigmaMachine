@@ -6,7 +6,8 @@ namespace EnigmaMachine
   {
     static void Main(string[] args)
     {
-      Console.WriteLine("Hello World!");
+      EnigmaMachine enigmaMachine = new EnigmaMachine("MyEnigmaMachine");
+      Console.Error.WriteLine($"Name: {enigmaMachine.Name}");
     }
   }
 }
