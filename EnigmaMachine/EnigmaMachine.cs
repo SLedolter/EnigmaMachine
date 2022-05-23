@@ -7,11 +7,15 @@ namespace EnigmaMachine {
     private string name;
     Cylinder entry_wheel, rotor1, rotor2, rotor3, reflector;
 
+    public string Name { get => name; set => name = value; }
+
     public EnigmaMachine(string name) {
       this.Name = name;
     }
 
-    public string Name { get => name; set => name = value; }
+    public char Encoder(char original) {
+      return rotor1.Encode(original);
+    }
   }
 
   class Cylinder {
@@ -30,6 +34,14 @@ namespace EnigmaMachine {
       this.RingPosition = startPosition;
       this.Encoding = encoding;
       inputScheme = EnigmaConfig.ALPHABET;
+    }
+
+    public char Encode(char original) {
+      char result = original;
+
+
+
+      return result;
     }
   }
 
