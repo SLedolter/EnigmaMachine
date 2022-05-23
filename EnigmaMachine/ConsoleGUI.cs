@@ -7,14 +7,19 @@ namespace EnigmaMachine {
     const int COMMAND_AREA_HEIGHT = 4;
     const string MENU_ICON = ">>";
 
+    private EnigmaMachine enigmaMachine;
     private string lastInput;
     private bool userWantsToExit;
     private string currentMenuShortname = "";
 
+    private string originalMessage, encodedMessage;
+
     public string LastInput { get => lastInput; set => lastInput = value; }
     public bool UserWantsToExit { get => userWantsToExit; set => userWantsToExit = value; }
 
-    public ConsoleGUI() { }
+    public ConsoleGUI(EnigmaMachine enigmaMachine) {
+      this.enigmaMachine = enigmaMachine;
+    }
 
     public void ShowStartScreenAndGetInput() {
       lastInput = "";
@@ -38,6 +43,7 @@ namespace EnigmaMachine {
 
       Console.Clear();
       DrawCommandSectionAndPlaceInputCursor();
+      ShowMessages();
       command = ReadChar();
 
       return command;
@@ -81,6 +87,15 @@ namespace EnigmaMachine {
       Console.Write($"{currentMenuShortname}>> ");
     }
 
+    public void ShowMessages() {
+      Console.CursorTop = 5;
+      Console.CursorLeft = 0;
+      Console.Error.Write(originalMessage);
+      Console.CursorTop = 7;
+      Console.CursorLeft = 0;
+      Console.Error.WriteLine(encodedMessage);
+    }
+
     private void RunUserCommand() {
       switch (lastInput) {
         case "1":
@@ -93,11 +108,15 @@ namespace EnigmaMachine {
     }
 
     public void EncodeLetters() {
-      ConsoleKey input;
+      originalMessage = encodedMessage = "";
+
+      ConsoleKey userInput;
       
       do {
-        input = ShowPromptAndReadCommandChar("Enc");
-      } while (input != ConsoleKey.OemMinus);
+        userInput = ShowPromptAndReadCommandChar("Enc");
+        originalMessage += userInput;
+        encodedMessage += enigmaMachine.Encoder((char)userInput);
+      } while (userInput != ConsoleKey.OemMinus);
     }
   }
 }

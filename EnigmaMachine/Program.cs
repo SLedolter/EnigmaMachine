@@ -10,7 +10,7 @@ namespace EnigmaMachine
     static void Main(string[] args)
     {
       enigmaMachine = new EnigmaMachine("MyEnigmaMachine");
-      consoleGUI = new ConsoleGUI();
+      consoleGUI = new ConsoleGUI(enigmaMachine);
 
       do {
         Console.Clear();
