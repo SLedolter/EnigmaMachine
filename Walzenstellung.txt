@@ -1,0 +1,117 @@
+﻿Walze No. I
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+E K M F L G D Q V Z N T O W Y H X U S P A I B R C J 
+
+Walze No. II
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+A J D K S I R U X B L H W T M C Q G Z N P Y F V O E 
+	
+Walze No. III
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+B D F H J L C P R T X V Z N Y E I W G A K M U S Q O 
+	
+Walze No. IV
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+E S O V P Z J A Y Q U I R H X L N F T G K D C M W B 
+	
+Walze No. V
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+V Z B R G I T Y U P S D N H L X A W M J Q O F E C K 
+	
+Walze No. VI
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+J P G V O U M F Y Q B E N H Z R D K A S X L I C T W 
+	
+Walze No. VII
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+N Z J H G R C X M Y S W B O U F A I V L P E K Q D T 
+	
+Walze No. VIII
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+F K Q H T L X O C B J S P D Z R A M E W N I U Y G V 
+
+Walze beta (M4)
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+L E Y J V C N I X W P B Q M D R T A K Z G F U H O S 
+
+Walze gamma (M4)
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+F S O K A N U E R H M B T I Y C W L Q P Z X V G J D
+
+
+
+
+
+UKW A
+AE  BJ  CM  DZ  FL  GY  HX  IV  KW  NR  OQ  PU  ST
+
+was folgendes Schlüsselalphabet ergibt:
+	
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+E J M Z A L Y X V B W F C R Q U O N T S P I K H G D
+
+UKW B
+AY  BR  CU  DH  EQ  FS  GL  IP  JX  KN  MO  TZ  VW
+
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+Y R U H Q S L D P X N G O K M I E B F Z C W V J A T
+
+
+UKW C
+AF  BV  CP  DJ  EI  GO  HY  KR  LZ  MX  NW  QT  SU
+
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+F V P J I A O Y E D R Z X W G C T K U Q S B N M H L 
+
+UKW B schmal
+
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+E N K Q A U Y W J I C O P B L M D X Z V F T H R G S 
+
+UKW C schmal
+
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+R D O B J N T K V E H M L F C W Z A X G Y I P S U Q 
+
+
+
+
+Weiterschaltung der Walzen
+
+Walze No. I
+Pos. 17 (Q)
+
+Walze No. II
+Pos. 5 (E)
+	
+Walze No. III
+Pos. 22 (V)
+	
+Walze No. IV
+Pos. 10 (J)
+	
+Walze No. V
+Pos. 26 (Z)
+	
+Walze No. VI
+Pos. 26 und Pos. 13 (Z und M)
+
+Walze No. VII
+Pos. 26 und Pos. 13 (Z und M)	
+
+Walze No. VIII
+Pos. 26 und Pos. 13 (Z und M)
+
+
+
+Beispiel einer Einstellung
+
+Tag  Walzenlage  Ringstellung  ---- Steckerverbindungen ----
+ 29  I   IV III    16 26 08    AD CN ET FL GI JV KZ PU QY WX
+ 30  II  V  I      18 24 11    BN DZ EP FX GT HW IY OU QV RS
+ 31  III I  IV     01 17 22    AH BL CX DI ER FK GU NP OQ TY
+ 
+ 
+ 
+ Weiterführende Info
+ https://kryptografie.de/kryptografie/chiffre/enigma.htm
