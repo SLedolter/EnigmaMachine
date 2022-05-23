@@ -12,10 +12,18 @@ namespace EnigmaMachine {
     public EnigmaMachine(string name) {
       this.Name = name;
       this.rotor1 = new Cylinder("Rotor1", 1, EnigmaConfig.CYLINDER_1);
+      this.rotor2 = new Cylinder("Rotor2", 1, EnigmaConfig.CYLINDER_2);
+      this.rotor3 = new Cylinder("Rotor3", 1, EnigmaConfig.CYLINDER_3);
     }
 
     public char Encoder(char original) {
-      return rotor1.Encode(original);
+      char result = original;
+      
+      result = rotor1.Encode(result);
+      result = rotor2.Encode(result);
+      result = rotor3.Encode(result);
+      
+      return result;
     }
   }
 
@@ -44,7 +52,7 @@ namespace EnigmaMachine {
   }
 
   public static class EnigmaConfig {
-    public const string ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    public const string ALPHABET =   "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public const string CYLINDER_1 = "EKMFLGDQVZNTOWYHXUSPAIBRCJ";
     public const string CYLINDER_2 = "AJDKSIRUXBLHWTMCQGZNPYFVOE";
     public const string CYLINDER_3 = "BDFHJLCPRTXVZNYEIWGAKMUSQO";
