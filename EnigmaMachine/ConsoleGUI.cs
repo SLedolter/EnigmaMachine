@@ -5,17 +5,17 @@ using System.Text;
 namespace EnigmaMachine {
   class ConsoleGUI {
     const int COMMAND_AREA_HEIGHT = 4;
-    const int PADDING = 2;
+    const int PADDING = 1;
     const string MENU_ICON = ">>";
 
     private EnigmaMachine enigmaMachine;
-    private string lastInput;
+    private string lastMenuCommand;
     private bool userWantsToExit;
     private string currentMenuShortname = "";
 
     private string originalMessage, encodedMessage;
 
-    public string LastInput { get => lastInput; set => lastInput = value; }
+    public string LastInput { get => lastMenuCommand; set => lastMenuCommand = value; }
     public bool UserWantsToExit { get => userWantsToExit; set => userWantsToExit = value; }
 
     public ConsoleGUI(EnigmaMachine enigmaMachine) {
@@ -23,29 +23,26 @@ namespace EnigmaMachine {
     }
 
     public void ShowStartScreenAndGetInput() {
-      lastInput = "";
-      ShowInformations();
-      lastInput = ShowPromptAndReadCommandLine();
-    }
-
-    public void ShowInformations() {
-      PlaceCursorWithinPadding(0, 0);
+      lastMenuCommand = "";
+      lastMenuCommand = ShowPromptAndReadCommandLine();
     }
 
     private void PlaceCursorWithinPadding(int x, int y) {
       Console.CursorLeft = PADDING + x;
-      Console.CursorTop = PADDING+y;
+      Console.CursorTop = PADDING + y;
     }
 
     public string ShowPromptAndReadCommandLine(string menuPrefix = "") {
       currentMenuShortname = CreateMenuPrefix(menuPrefix);
 
       Console.Clear();
+      ShowInformations(0, 0);
+      ShowMessages(Console.WindowWidth / 2, 0);
       DrawCommandSectionAndPlaceInputCursor();
-      lastInput = ReadLine();
+      lastMenuCommand = ReadLine();
       RunUserCommand();
 
-      return lastInput;
+      return lastMenuCommand;
     }
 
     public ConsoleKeyInfo ShowPromptAndReadCommandChar(string menuPrefix = "") {
@@ -53,8 +50,9 @@ namespace EnigmaMachine {
       currentMenuShortname = CreateMenuPrefix(menuPrefix);
 
       Console.Clear();
+      ShowInformations(0, 0);
+      ShowMessages(Console.WindowWidth/2, 0);
       DrawCommandSectionAndPlaceInputCursor();
-      ShowMessages();
       command = ReadChar();
 
       return command;
@@ -63,7 +61,7 @@ namespace EnigmaMachine {
     public string CreateMenuPrefix(string menuPrefixIn) {
       string result;
 
-      if(menuPrefixIn.Length > 0) {
+      if (menuPrefixIn.Length > 0) {
         result = menuPrefixIn + " ";
       } else {
         result = "";
@@ -75,7 +73,7 @@ namespace EnigmaMachine {
     private void PlaceInputCursorToPromptSign() {
       PlaceCursorWithinPadding(
         currentMenuShortname.Length + MENU_ICON.Length + 1,
-        Console.CursorTop = Console.WindowHeight - COMMAND_AREA_HEIGHT + 2);
+        Console.WindowHeight - COMMAND_AREA_HEIGHT);
     }
 
     private string ReadLine() {
@@ -85,7 +83,7 @@ namespace EnigmaMachine {
 
     private ConsoleKeyInfo ReadChar() {
       PlaceInputCursorToPromptSign();
-      return Console.ReadKey() ;
+      return Console.ReadKey();
     }
 
     private void DrawCommandSectionAndPlaceInputCursor() {
@@ -94,19 +92,41 @@ namespace EnigmaMachine {
         Console.CursorLeft = i;
         Console.Write("-");
       }
-      PlaceCursorWithinPadding(0, Console.WindowHeight - COMMAND_AREA_HEIGHT + 2);
+      PlaceCursorWithinPadding(0, Console.WindowHeight - COMMAND_AREA_HEIGHT);
       Console.Write($"{currentMenuShortname}>> ");
     }
 
-    public void ShowMessages() {
-      PlaceCursorWithinPadding(0, 5);
-      Console.Error.Write(originalMessage);
-      PlaceCursorWithinPadding(0, 7);
-      Console.Error.WriteLine(encodedMessage);
+    public void ShowInformations(int x, int y) {
+      DrawCylinder(enigmaMachine.entry_wheel, 0, y);
+      DrawCylinder(enigmaMachine.rotor1, 0, y + 4);
+      DrawCylinder(enigmaMachine.rotor2, 0, y + 9);
+      DrawCylinder(enigmaMachine.rotor3, 0, y + 14);
+      DrawCylinder(enigmaMachine.reflector, 0, y + 19);
+    }
+
+    public void DrawCylinder(Cylinder cylinder, int x, int y) {
+      int yIndex = 0;
+      PlaceCursorWithinPadding(x + 0, y + yIndex++);
+      Console.Write($"{cylinder.Name}");
+      if(cylinder.RingPositionIndex >= 0) {
+        PlaceCursorWithinPadding(x + cylinder.RingPositionIndex, y + yIndex++);
+        Console.Write("V");
+      }
+      PlaceCursorWithinPadding(x + 0, y + yIndex++);
+      Console.Write(cylinder.InputScheme);
+      PlaceCursorWithinPadding(x + 0, y + yIndex++);
+      Console.Write(cylinder.OutputScheme);
+    }
+
+    public void ShowMessages(int x, int y) {
+      PlaceCursorWithinPadding(x + 0, y + 0);
+      Console.Write(originalMessage);
+      PlaceCursorWithinPadding(x + 0, y + 1);
+      Console.WriteLine(encodedMessage);
     }
 
     private void RunUserCommand() {
-      switch (lastInput) {
+      switch (lastMenuCommand) {
         case "1":
           EncodeLetters();
           break;
@@ -127,7 +147,7 @@ namespace EnigmaMachine {
       while ((userInput = ShowPromptAndReadCommandChar("Enc")).Key != ConsoleKey.OemMinus) {
         char result;
         result = char.ToUpper(userInput.KeyChar);
-        if(result < 'A' || result > 'Z') {
+        if (result < 'A' || result > 'Z') {
           continue;
         }
 

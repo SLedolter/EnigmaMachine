@@ -6,17 +6,22 @@ using System.Text;
 namespace EnigmaMachine {
   public class EnigmaMachine {
     private string name;
-    Cylinder entry_wheel, rotor1, rotor2, rotor3, reflector;
 
+    public List<Cylinder> cylinders = new List<Cylinder>();
+    public Cylinder entry_wheel, rotor1, rotor2, rotor3, reflector;
     public string Name { get => name; set => name = value; }
     
-    public EnigmaMachine(string name) {
+    public EnigmaMachine(string name, string[] rotorNames, int[] ringPositions, string plugboardConfig) {
       this.Name = name;
-      this.entry_wheel = new Cylinder("entry_wheel", 0, EnigmaConfig.TransformSwitchedPlugsToAlphabet(EnigmaConfig.PLUGBOARD_1), 0);
+      this.entry_wheel = new Cylinder("entry_wheel", 0, EnigmaConfig.TransformSwitchedPlugsToAlphabet(plugboardConfig), 0);
+      
+      
+      
       this.rotor1 = new Cylinder("Rotor1", 1, EnigmaConfig.CYLINDER_1, EnigmaConfig.TURNOVER_1_CYLINDER_1);
       this.rotor2 = new Cylinder("Rotor2", 1, EnigmaConfig.CYLINDER_2, EnigmaConfig.TURNOVER_1_CYLINDER_2);
       this.rotor3 = new Cylinder("Rotor3", 1, EnigmaConfig.CYLINDER_3, EnigmaConfig.TURNOVER_1_CYLINDER_3);
-      this.reflector = new Cylinder("Reflector", 0, EnigmaConfig.REFLECTOR_A_SOLUTION, 0);
+      
+      this.reflector = new Cylinder("Reflector", 0, EnigmaConfig.TransformSwitchedPlugsToAlphabet(EnigmaConfig.REFLECTOR_A), 0);
 
       this.rotor1.ConnectNextRotor(rotor2);
       this.rotor2.ConnectNextRotor(rotor3);
@@ -69,7 +74,7 @@ namespace EnigmaMachine {
   /// <summary>
   /// Model for base cylinder (should be refactored to real base cylinder and other types inheriting from it)
   /// </summary>
-  class Cylinder {
+  public class Cylinder {
     private string name;
     private int ringPosition;
     private int turnoverPosition;
@@ -79,12 +84,19 @@ namespace EnigmaMachine {
 
     public Cylinder previousCylinder, nextCylinder;
 
+    public string Name { get => name; set => name = value; }
+    public int RingPositionIndex { get => ringPosition; set => ringPosition = value; }
+    public int TurnoverPosition { get => turnoverPosition; set => turnoverPosition = value; }
+    public string InputScheme { get => inputScheme; set => inputScheme = value; }
+    public string OutputScheme { get => outputScheme; set => outputScheme = value; }
+    public int StartPosition { get => startPosition; set => startPosition = value; }
+
     public Cylinder(string name, int startPosition, string outputScheme, int turnoverPosition) {
-      this.name = name;
-      this.ringPosition = this.startPosition = startPosition - 1;
-      this.turnoverPosition = turnoverPosition - 1;
-      inputScheme = EnigmaConfig.ALPHABET;
-      this.outputScheme = outputScheme;
+      this.Name = name;
+      this.RingPositionIndex = this.StartPosition = startPosition - 1;
+      this.TurnoverPosition = turnoverPosition - 1;
+      InputScheme = EnigmaConfig.ALPHABET;
+      this.OutputScheme = outputScheme;
     }
 
     public void ConnectPreviousRotor(Cylinder rotor) {
@@ -98,40 +110,43 @@ namespace EnigmaMachine {
     }
 
     public void ResetCylinder() {
-      ringPosition = startPosition;
+      RingPositionIndex = StartPosition;
     }
 
     public char Encode(char original) {
       char result = ' ';
+      int offset = 0;
 
       if (original >= 'A' && original <= 'Z') {
-        int offset = (inputScheme.IndexOf(original.ToString()) + (ringPosition > -1 ? ringPosition : 0)) % 26;
-        result = outputScheme[offset];
+        offset = (InputScheme.IndexOf(original.ToString()) + (RingPositionIndex > -1 ? RingPositionIndex : 0)) % 26;
+        result = OutputScheme[offset];
       }
-      Debug.Write($"{original} --> {result} ");
+      Debug.Write($"{original} --> {result} {offset}");
       return result;
     }
 
     public char Decode(char encodedChar) {
       char result = ' ';
+      int offset = 0;
 
       if(encodedChar >= 'A' && encodedChar <= 'Z') {
-        int offset = (outputScheme.IndexOf(encodedChar.ToString()) + (ringPosition > -1 ? ringPosition : 0)) % 26;
-        result = inputScheme[offset];
+        offset = (OutputScheme.IndexOf(encodedChar.ToString()) - (RingPositionIndex > -1 ? RingPositionIndex : 0));
+        if(offset < 0) {
+          offset += 26;
+        }
+        result = InputScheme[offset];
       }
       Debug.Write($"{encodedChar} --> {result} ");
       return result;
     }
 
     public void IncreaseRingPositionAndCheckOverturn() {
-      ringPosition++;
-      Debug.WriteLine($"nRP: {ringPosition} {name}");
-      if (ringPosition > 26) {
-        ringPosition %= 26;
-      }
+      RingPositionIndex++;
+      Debug.WriteLine($"nRP: {RingPositionIndex} {Name}");
+      RingPositionIndex %= 26;
 
-      if (ringPosition == turnoverPosition) {
-        Debug.WriteLine($"{name} turnover at {turnoverPosition}({inputScheme[turnoverPosition]})");
+      if (RingPositionIndex == TurnoverPosition) {
+        Debug.WriteLine($"{Name} turnover at {TurnoverPosition}({InputScheme[TurnoverPosition]})");
         if (nextCylinder != null) {
           nextCylinder.IncreaseRingPositionAndCheckOverturn();
         }

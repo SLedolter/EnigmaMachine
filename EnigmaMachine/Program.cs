@@ -9,7 +9,12 @@ namespace EnigmaMachine
 
     static void Main(string[] args)
     {
-      enigmaMachine = new EnigmaMachine("MyEnigmaMachine");
+      enigmaMachine = new EnigmaMachine(
+        "MyEnigmaMachine", 
+        new string[] { "I", "IV", "III" }, 
+        new int[] { 16, 26, 08}, 
+        EnigmaConfig.PLUGBOARD_DAY_29
+      );
       consoleGUI = new ConsoleGUI(enigmaMachine);
 
       do {
