@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace EnigmaMachine {
@@ -11,77 +12,105 @@ namespace EnigmaMachine {
 
     public EnigmaMachine(string name) {
       this.Name = name;
-      this.rotor1 = new Cylinder("Rotor1", 1, EnigmaConfig.CYLINDER_1);
-      this.rotor2 = new Cylinder("Rotor2", 1, EnigmaConfig.CYLINDER_2);
-      this.rotor3 = new Cylinder("Rotor3", 1, EnigmaConfig.CYLINDER_3);
+      this.rotor1 = new Cylinder("Rotor1", 1, EnigmaConfig.CYLINDER_1, EnigmaConfig.TURNOVER_1_CYLINDER_1);
+      this.rotor2 = new Cylinder("Rotor2", 1, EnigmaConfig.CYLINDER_2, EnigmaConfig.TURNOVER_1_CYLINDER_2);
+      this.rotor3 = new Cylinder("Rotor3", 1, EnigmaConfig.CYLINDER_3, EnigmaConfig.TURNOVER_1_CYLINDER_3);
+      this.reflector = new Cylinder("Reflector", 0, EnigmaConfig.REFLECTOR_A_SOLUTION, 0);
+
+      this.rotor1.nextCylinder = rotor2;
+      this.rotor1.nextCylinder = rotor3;
+    }
+
+    public void ResetMachine() {
+      rotor1.ResetCylinder();
+      rotor2.ResetCylinder();
+      rotor3.ResetCylinder();
     }
 
     public char Encoder(char original) {
       char result = original;
-      
+
+      Debug.Write($"(R1) {result} --> ");
       result = rotor1.Encode(result);
+      Debug.Write($"{result}\n{result} --> ");
       result = rotor2.Encode(result);
+      Debug.Write($"result}\n(R2) {result} --> ");
       result = rotor3.Encode(result);
-      
+      Debug.Write($"result}\n(R3) {result} --> ");
+      result = reflector.Encode(result);
+      Debug.Write($"result}\n(UKW) {result} --> ");
+      result = rotor3.Encode(result);
+      Debug.Write($"result}\n(R3) {result} --> ");
+      result = rotor2.Encode(result);
+      Debug.Write($"result}\n(R2) {result} --> ");
+      result = rotor1.Encode(result);
+      Debug.Write($"result}\n(R1) {result} --> ");
+
+      rotor1.IncreaseRingPositionAndCheckOverturn();
+
       return result;
     }
   }
 
+  /// <summary>
+  /// Model for base cylinder (should be refactored to real base cylinder and other types inheriting from it)
+  /// </summary>
   class Cylinder {
-    string name;
-    int ringPosition;
-    string inputScheme;
-    string outputScheme;
+    private string name;
+    private int ringPosition;
+    private int turnoverPosition;
+    private string inputScheme;
+    private string outputScheme;
+    private int startPosition;
 
-    public int RingPosition { get => ringPosition; set => ringPosition = value; }
-    public string Encoding { get => outputScheme; set => outputScheme = value; }
-    public string Name { get => name; set => name = value; }
-    public string Alphabet { get => inputScheme; set => inputScheme = value; }
+    public Cylinder previousCylinder, nextCylinder;
 
-    public Cylinder(string name, int startPosition, string encoding) {
-      this.Name = name;
-      this.RingPosition = startPosition;
-      this.Encoding = encoding;
+    public Cylinder(string name, int startPosition, string outputScheme, int turnoverPosition) {
+      this.name = name;
+      this.ringPosition = this.startPosition = startPosition - 1;
+      this.turnoverPosition = turnoverPosition - 1;
       inputScheme = EnigmaConfig.ALPHABET;
+      this.outputScheme = outputScheme;
+    }
+
+    public void ConnectPreviousRotor(Cylinder rotor) {
+      previousCylinder = rotor;
+      rotor.nextCylinder = this;
+    }
+
+    public void ConnectNextRotor(Cylinder rotor) {
+      nextCylinder = rotor;
+      rotor.previousCylinder = this;
+    }
+
+    public void ResetCylinder() {
+      ringPosition = startPosition;
     }
 
     public char Encode(char original) {
       char result = ' ';
-       ringPosition = (ringPosition++) % 26;
+     
       if(original >= 'A' && original <= 'Z') {
-        int offset = (((ringPosition) % 26) + inputScheme.IndexOf(original.ToString())) % 26;
+        int offset = (inputScheme.IndexOf(original.ToString()) + (ringPosition>-1?ringPosition:0)) % 26;
         result = outputScheme[offset];
       }
       return result;
     }
-  }
 
-  public static class EnigmaConfig {
-    public const string ALPHABET =   "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    public const string CYLINDER_1 = "EKMFLGDQVZNTOWYHXUSPAIBRCJ";
-    public const string CYLINDER_2 = "AJDKSIRUXBLHWTMCQGZNPYFVOE";
-    public const string CYLINDER_3 = "BDFHJLCPRTXVZNYEIWGAKMUSQO";
-    public const string CYLINDER_4 = "ESOVPZJAYQUIRHXLNFTGKDCMWB";
-    public const string CYLINDER_5 = "VZBRGITYUPSDNHLXAWMJQOFECK";
-    public const string CYLINDER_6 = "JPGVOUMFYQBENHZRDKASXLICTW";
-    public const string CYLINDER_7 = "NZJHGRCXMYSWBOUFAIVLPEKQDT";
-    public const string CYLINDER_8 = "FKQHTLXOCBJSPDZRAMEWNIUYGV";
-    public const string CYLINDER_BETA_M4 = "LEYJVCNIXWPBQMDRTAKZGFUHOS";
-    public const string CYLINDER_GAMMA_M4 = "FSOKANUERHMBTIYCWLQPZXVGJD";
+    public void IncreaseRingPositionAndCheckOverturn() {
+      ringPosition++;
+      Debug.WriteLine($"nRP: {ringPosition} {name}");
+      if (ringPosition > 26) {
+        ringPosition %= 26;
+      }
 
-    public const string REFLECTOR_A = "AE  BJ  CM  DZ  FL  GY  HX  IV  KW  NR  OQ  PU  ST";
-    public const string REFLECTOR_A_SOLUTION = "EJMZALYXVBWFCRQUONTSPIKHGD";
-
-    public const string REFLECTOR_B = "AY  BR  CU  DH  EQ  FS  GL  IP  JX  KN  MO  TZ  VW";
-    public const string REFLECTOR_B_SOLUTION = "YRUHQSLDPXNGOKMIEBFZCWVJAT";
-
-    public const string REFLECTOR_C = "AF  BV  CP  DJ  EI  GO  HY  KR  LZ  MX  NW  QT  SU";
-    public const string REFLECTOR_C_SOLUTION = "FVPJIAOYEDRZXWGCTKUQSBNMHL";
-
-    public const string REFLECTOR_B_NARROW = "AE  BJ  CM  DZ  FL  GY  HX  IV  KW  NR  OQ  PU  ST";
-    public const string REFLECTOR_B_NARROW_SOLUTION = "ENKQAUYWJICOPBLMDXZVFTHRGS";
-
-    public const string REFLECTOR_C_NARROW = "AE  BJ  CM  DZ  FL  GY  HX  IV  KW  NR  OQ  PU  ST";
-    public const string REFLECTOR_C_NARROW_SOLUTION = "RDOBJNTKVEHMLFCWZAXGYIPSUQ";
+      if(ringPosition == turnoverPosition) {
+        Debug.WriteLine($"{name} overTurn at {turnoverPosition}{inputScheme[turnoverPosition]}");
+        if (nextCylinder != null) {
+          nextCylinder.IncreaseRingPositionAndCheckOverturn();
+        }
+      }
+      
+    }
   }
 }

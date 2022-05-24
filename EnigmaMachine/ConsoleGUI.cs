@@ -115,9 +115,16 @@ namespace EnigmaMachine {
       while ((userInput = ShowPromptAndReadCommandChar("Enc")).Key != ConsoleKey.OemMinus) {
         char result;
         result = char.ToUpper(userInput.KeyChar);
+        if(result < 'A' || result > 'Z') {
+          continue;
+        }
+
         originalMessage += result;
         encodedMessage += enigmaMachine.Encoder(result);
       }
+
+      enigmaMachine.ResetMachine();
+      originalMessage = encodedMessage = "";
     }
   }
 }
