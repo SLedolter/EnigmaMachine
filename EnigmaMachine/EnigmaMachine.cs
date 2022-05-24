@@ -47,7 +47,7 @@ namespace EnigmaMachine {
         encodedResult = cylinders[i].Encode(encodedResult);
       }
       encodedResult = reflector.Encode(encodedResult);
-      for (int i = 0; i < cylinders.Count; i++) {
+      for (int i = cylinders.Count - 1; i >= 0; i--) {
         encodedResult = cylinders[i].Encode(encodedResult);
       }
       encodedResult = entry_wheel.Encode(encodedResult);
@@ -64,7 +64,7 @@ namespace EnigmaMachine {
         decodedResult = cylinders[i].Decode(decodedResult);
       }
       decodedResult = reflector.Decode(decodedResult);
-      for (int i = 0; i < cylinders.Count; i++) {
+      for (int i = cylinders.Count - 1; i >= 0; i--) {
         decodedResult = cylinders[i].Decode(decodedResult);
       }
       decodedResult = entry_wheel.Decode(decodedResult);
