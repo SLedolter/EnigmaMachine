@@ -37,8 +37,8 @@ namespace EnigmaMachine {
       return lastInput;
     }
 
-    public ConsoleKey ShowPromptAndReadCommandChar(string menuPrefix = "") {
-      ConsoleKey command;
+    public ConsoleKeyInfo ShowPromptAndReadCommandChar(string menuPrefix = "") {
+      ConsoleKeyInfo command;
       currentMenuShortname = CreateMenuPrefix(menuPrefix);
 
       Console.Clear();
@@ -71,9 +71,9 @@ namespace EnigmaMachine {
       return Console.ReadLine();
     }
 
-    private ConsoleKey ReadChar() {
+    private ConsoleKeyInfo ReadChar() {
       PlaceInputCursorToPromptSign();
-      return Console.ReadKey().Key ;
+      return Console.ReadKey() ;
     }
 
     private void DrawCommandSectionAndPlaceInputCursor() {
@@ -110,13 +110,14 @@ namespace EnigmaMachine {
     public void EncodeLetters() {
       originalMessage = encodedMessage = "";
 
-      ConsoleKey userInput;
-      
-      do {
-        userInput = ShowPromptAndReadCommandChar("Enc");
-        originalMessage += userInput;
-        encodedMessage += enigmaMachine.Encoder((char)userInput);
-      } while (userInput != ConsoleKey.OemMinus);
+      ConsoleKeyInfo userInput;
+
+      while ((userInput = ShowPromptAndReadCommandChar("Enc")).Key != ConsoleKey.OemMinus) {
+        char result;
+        result = char.ToUpper(userInput.KeyChar);
+        originalMessage += result;
+        encodedMessage += enigmaMachine.Encoder(result);
+      }
     }
   }
 }

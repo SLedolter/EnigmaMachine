@@ -15,7 +15,6 @@ namespace EnigmaMachine
       do {
         Console.Clear();
         consoleGUI.ShowStartScreenAndGetInput();
-        consoleGUI.ShowStartScreenAndGetInput();
       } while (!consoleGUI.UserWantsToExit);
     }
 

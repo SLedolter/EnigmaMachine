@@ -46,7 +46,12 @@ namespace EnigmaMachine {
     }
 
     public char Encode(char original) {
-      char result = outputScheme[inputScheme.IndexOf(original.ToString())];
+      char result = ' ';
+       ringPosition = (ringPosition++) % 26;
+      if(original >= 'A' && original <= 'Z') {
+        int offset = (((ringPosition) % 26) + inputScheme.IndexOf(original.ToString())) % 26;
+        result = outputScheme[offset];
+      }
       return result;
     }
   }
