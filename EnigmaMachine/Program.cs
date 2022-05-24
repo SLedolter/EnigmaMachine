@@ -11,8 +11,8 @@ namespace EnigmaMachine
     {
       enigmaMachine = new EnigmaMachine(
         "MyEnigmaMachine", 
-        new string[] { "I", "IV", "III" }, 
-        new int[] { 16, 26, 08}, 
+        new string[] { "1", "4", "3" }, 
+        new int[] { 16, 26, 8}, 
         EnigmaConfig.PLUGBOARD_DAY_29
       );
       consoleGUI = new ConsoleGUI(enigmaMachine);

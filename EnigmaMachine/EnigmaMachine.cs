@@ -8,45 +8,51 @@ namespace EnigmaMachine {
     private string name;
 
     public List<Cylinder> cylinders = new List<Cylinder>();
-    public Cylinder entry_wheel, rotor1, rotor2, rotor3, reflector;
+    public Cylinder entry_wheel, reflector;
     public string Name { get => name; set => name = value; }
     
     public EnigmaMachine(string name, string[] rotorNames, int[] ringPositions, string plugboardConfig) {
       this.Name = name;
       this.entry_wheel = new Cylinder("entry_wheel", 0, EnigmaConfig.TransformSwitchedPlugsToAlphabet(plugboardConfig), 0);
       
-      
-      
-      this.rotor1 = new Cylinder("Rotor1", 1, EnigmaConfig.CYLINDER_1, EnigmaConfig.TURNOVER_1_CYLINDER_1);
-      this.rotor2 = new Cylinder("Rotor2", 1, EnigmaConfig.CYLINDER_2, EnigmaConfig.TURNOVER_1_CYLINDER_2);
-      this.rotor3 = new Cylinder("Rotor3", 1, EnigmaConfig.CYLINDER_3, EnigmaConfig.TURNOVER_1_CYLINDER_3);
+      for(int i = 0; i < rotorNames.Length; i++) {
+        cylinders.Add(
+          new Cylinder(
+            "Rotor" + rotorNames[i], 
+            ringPositions[i], 
+            (string)typeof(EnigmaConfig).GetField("CYLINDER_"+rotorNames[i]).GetValue(null), 
+            (int)typeof(EnigmaConfig).GetField("TURNOVER_1_CYLINDER_"+rotorNames[i]).GetValue(null)
+          )
+        );
+      }
       
       this.reflector = new Cylinder("Reflector", 0, EnigmaConfig.TransformSwitchedPlugsToAlphabet(EnigmaConfig.REFLECTOR_A), 0);
 
-      this.rotor1.ConnectNextRotor(rotor2);
-      this.rotor2.ConnectNextRotor(rotor3);
+      for(int i = 0; i < cylinders.Count - 1; i++) {
+        cylinders[i].ConnectNextRotor(cylinders[i + 1]);
+      }
     }
 
     public void ResetMachine() {
-      rotor1.ResetCylinder();
-      rotor2.ResetCylinder();
-      rotor3.ResetCylinder();
+      for(int i = 0; i < cylinders.Count; i++) {
+        cylinders[i].ResetCylinder();
+      }
     }
 
     public char Encoder(char message) {
       char encodedResult = message;
 
       encodedResult = entry_wheel.Encode(encodedResult);
-      encodedResult = rotor1.Encode(encodedResult);
-      encodedResult = rotor2.Encode(encodedResult);
-      encodedResult = rotor3.Encode(encodedResult);
+      for(int i = 0; i < cylinders.Count; i++) {
+        encodedResult = cylinders[i].Encode(encodedResult);
+      }
       encodedResult = reflector.Encode(encodedResult);
-      encodedResult = rotor3.Encode(encodedResult);
-      encodedResult = rotor2.Encode(encodedResult);
-      encodedResult = rotor1.Encode(encodedResult);
+      for (int i = 0; i < cylinders.Count; i++) {
+        encodedResult = cylinders[i].Encode(encodedResult);
+      }
       encodedResult = entry_wheel.Encode(encodedResult);
 
-      rotor1.IncreaseRingPositionAndCheckOverturn();
+      cylinders[0].IncreaseRingPositionAndCheckOverturn();
 
       return encodedResult;
     }
@@ -54,16 +60,16 @@ namespace EnigmaMachine {
       char decodedResult = message;
 
       decodedResult = entry_wheel.Decode(decodedResult);
-      decodedResult = rotor1.Decode(decodedResult);
-      decodedResult = rotor2.Decode(decodedResult);
-      decodedResult = rotor3.Decode(decodedResult);
+      for (int i = 0; i < cylinders.Count; i++) {
+        decodedResult = cylinders[i].Decode(decodedResult);
+      }
       decodedResult = reflector.Decode(decodedResult);
-      decodedResult = rotor3.Decode(decodedResult);
-      decodedResult = rotor2.Decode(decodedResult);
-      decodedResult = rotor1.Decode(decodedResult);
+      for (int i = 0; i < cylinders.Count; i++) {
+        decodedResult = cylinders[i].Decode(decodedResult);
+      }
       decodedResult = entry_wheel.Decode(decodedResult);
 
-      rotor1.IncreaseRingPositionAndCheckOverturn();
+      cylinders[0].IncreaseRingPositionAndCheckOverturn();
 
       return decodedResult;
     }
