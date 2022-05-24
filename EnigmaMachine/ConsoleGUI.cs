@@ -5,6 +5,7 @@ using System.Text;
 namespace EnigmaMachine {
   class ConsoleGUI {
     const int COMMAND_AREA_HEIGHT = 4;
+    const int PADDING = 2;
     const string MENU_ICON = ">>";
 
     private EnigmaMachine enigmaMachine;
@@ -23,7 +24,17 @@ namespace EnigmaMachine {
 
     public void ShowStartScreenAndGetInput() {
       lastInput = "";
+      ShowInformations();
       lastInput = ShowPromptAndReadCommandLine();
+    }
+
+    public void ShowInformations() {
+      PlaceCursorWithinPadding(0, 0);
+    }
+
+    private void PlaceCursorWithinPadding(int x, int y) {
+      Console.CursorLeft = PADDING + x;
+      Console.CursorTop = PADDING+y;
     }
 
     public string ShowPromptAndReadCommandLine(string menuPrefix = "") {
@@ -62,8 +73,9 @@ namespace EnigmaMachine {
     }
 
     private void PlaceInputCursorToPromptSign() {
-      Console.CursorLeft = currentMenuShortname.Length + MENU_ICON.Length + 1;
-      Console.CursorTop = Console.WindowHeight - COMMAND_AREA_HEIGHT + 2;
+      PlaceCursorWithinPadding(
+        currentMenuShortname.Length + MENU_ICON.Length + 1,
+        Console.CursorTop = Console.WindowHeight - COMMAND_AREA_HEIGHT + 2);
     }
 
     private string ReadLine() {
@@ -82,17 +94,14 @@ namespace EnigmaMachine {
         Console.CursorLeft = i;
         Console.Write("-");
       }
-      Console.CursorLeft = 0;
-      Console.CursorTop = Console.WindowHeight - COMMAND_AREA_HEIGHT + 2;
+      PlaceCursorWithinPadding(0, Console.WindowHeight - COMMAND_AREA_HEIGHT + 2);
       Console.Write($"{currentMenuShortname}>> ");
     }
 
     public void ShowMessages() {
-      Console.CursorTop = 5;
-      Console.CursorLeft = 0;
+      PlaceCursorWithinPadding(0, 5);
       Console.Error.Write(originalMessage);
-      Console.CursorTop = 7;
-      Console.CursorLeft = 0;
+      PlaceCursorWithinPadding(0, 7);
       Console.Error.WriteLine(encodedMessage);
     }
 

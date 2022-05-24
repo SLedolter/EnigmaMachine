@@ -5,7 +5,9 @@ using System.Text;
 namespace EnigmaMachine {
   public static class EnigmaConfig {
     public const string ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    
+
+    public const string PLUGBOARD_1 = "AD CN ET FL GI JV KZ PU QY WX";
+
     public const string CYLINDER_1 = "EKMFLGDQVZNTOWYHXUSPAIBRCJ";
     public const int TURNOVER_1_CYLINDER_1 = 17;
     
@@ -48,5 +50,25 @@ namespace EnigmaMachine {
     public const string REFLECTOR_B_NARROW_SOLUTION = "ENKQAUYWJICOPBLMDXZVFTHRGS";
 
     public const string REFLECTOR_C_NARROW_SOLUTION = "RDOBJNTKVEHMLFCWZAXGYIPSUQ";
+
+    public static string TransformSwitchedPlugsToAlphabet(string plugboardOrder) {
+      string result = EnigmaConfig.ALPHABET;
+      int index1, index2;
+      char char1, char2;
+
+      foreach (string pair in plugboardOrder.Split(" ")) {
+        index1 = result.IndexOf(pair[0]);
+        char1 = result[index1];
+        index2 = result.IndexOf(pair[1]);
+        char2 = result[index2];
+        result = result
+          .Remove(index1, 1)
+          .Insert(index1, char2.ToString())
+          .Remove(index2, 1)
+          .Insert(index2, char1.ToString());
+      }
+
+      return result;
+    }
   }
 }

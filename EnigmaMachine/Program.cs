@@ -17,11 +17,5 @@ namespace EnigmaMachine
         consoleGUI.ShowStartScreenAndGetInput();
       } while (!consoleGUI.UserWantsToExit);
     }
-
-    static void ShowUserInterface(EnigmaMachine enigmaMachine) {
-      Console.CursorLeft = 0;
-      Console.CursorTop = 0;
-      Console.Error.WriteLine($"Name: {enigmaMachine.Name}");
-    }
   }
 }

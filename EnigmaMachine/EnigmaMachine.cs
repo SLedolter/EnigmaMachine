@@ -9,16 +9,17 @@ namespace EnigmaMachine {
     Cylinder entry_wheel, rotor1, rotor2, rotor3, reflector;
 
     public string Name { get => name; set => name = value; }
-
+    
     public EnigmaMachine(string name) {
       this.Name = name;
+      this.entry_wheel = new Cylinder("entry_wheel", 0, EnigmaConfig.TransformSwitchedPlugsToAlphabet(EnigmaConfig.PLUGBOARD_1), 0);
       this.rotor1 = new Cylinder("Rotor1", 1, EnigmaConfig.CYLINDER_1, EnigmaConfig.TURNOVER_1_CYLINDER_1);
       this.rotor2 = new Cylinder("Rotor2", 1, EnigmaConfig.CYLINDER_2, EnigmaConfig.TURNOVER_1_CYLINDER_2);
       this.rotor3 = new Cylinder("Rotor3", 1, EnigmaConfig.CYLINDER_3, EnigmaConfig.TURNOVER_1_CYLINDER_3);
       this.reflector = new Cylinder("Reflector", 0, EnigmaConfig.REFLECTOR_A_SOLUTION, 0);
 
-      this.rotor1.nextCylinder = rotor2;
-      this.rotor1.nextCylinder = rotor3;
+      this.rotor1.ConnectNextRotor(rotor2);
+      this.rotor2.ConnectNextRotor(rotor3);
     }
 
     public void ResetMachine() {
@@ -30,46 +31,34 @@ namespace EnigmaMachine {
     public char Encoder(char message) {
       char encodedResult = message;
 
-      Debug.Write($"(R1) {encodedResult} --> ");
+      encodedResult = entry_wheel.Encode(encodedResult);
       encodedResult = rotor1.Encode(encodedResult);
-      Debug.Write($"{encodedResult}\n{encodedResult} --> ");
-      //result = rotor2.Encode(result);
-      //Debug.Write($"result}\n(R2) {result} --> ");
-      //result = rotor3.Encode(result);
-      //Debug.Write($"result}\n(R3) {result} --> ");
+      encodedResult = rotor2.Encode(encodedResult);
+      encodedResult = rotor3.Encode(encodedResult);
       encodedResult = reflector.Encode(encodedResult);
-      Debug.Write($"{encodedResult}\n(UKW) {encodedResult} --> ");
-      //result = rotor3.Encode(result);
-      //Debug.Write($"result}\n(R3) {result} --> ");
-      //result = rotor2.Encode(result);
-      //Debug.Write($"result}\n(R2) {result} --> ");
+      encodedResult = rotor3.Encode(encodedResult);
+      encodedResult = rotor2.Encode(encodedResult);
       encodedResult = rotor1.Encode(encodedResult);
-      Debug.Write($"{encodedResult}\n(R1) {encodedResult} --> ");
+      encodedResult = entry_wheel.Encode(encodedResult);
 
-      //rotor1.IncreaseRingPositionAndCheckOverturn();
+      rotor1.IncreaseRingPositionAndCheckOverturn();
 
       return encodedResult;
     }
     public char Decoder(char message) {
       char decodedResult = message;
 
-      Debug.Write($"(R1) {decodedResult} --> ");
+      decodedResult = entry_wheel.Decode(decodedResult);
       decodedResult = rotor1.Decode(decodedResult);
-      Debug.Write($"{decodedResult}\n{decodedResult} --> ");
-      //result = rotor2.Encode(result);
-      //Debug.Write($"result}\n(R2) {result} --> ");
-      //result = rotor3.Encode(result);
-      //Debug.Write($"result}\n(R3) {result} --> ");
+      decodedResult = rotor2.Decode(decodedResult);
+      decodedResult = rotor3.Decode(decodedResult);
       decodedResult = reflector.Decode(decodedResult);
-      Debug.Write($"{decodedResult}\n(UKW) {decodedResult} --> ");
-      //result = rotor3.Encode(result);
-      //Debug.Write($"result}\n(R3) {result} --> ");
-      //result = rotor2.Encode(result);
-      //Debug.Write($"result}\n(R2) {result} --> ");
+      decodedResult = rotor3.Decode(decodedResult);
+      decodedResult = rotor2.Decode(decodedResult);
       decodedResult = rotor1.Decode(decodedResult);
-      Debug.Write($"{decodedResult}\n(R1) {decodedResult} --> ");
+      decodedResult = entry_wheel.Decode(decodedResult);
 
-      //rotor1.IncreaseRingPositionAndCheckOverturn();
+      rotor1.IncreaseRingPositionAndCheckOverturn();
 
       return decodedResult;
     }
@@ -119,6 +108,7 @@ namespace EnigmaMachine {
         int offset = (inputScheme.IndexOf(original.ToString()) + (ringPosition > -1 ? ringPosition : 0)) % 26;
         result = outputScheme[offset];
       }
+      Debug.Write($"{original} --> {result} ");
       return result;
     }
 
@@ -129,7 +119,7 @@ namespace EnigmaMachine {
         int offset = (outputScheme.IndexOf(encodedChar.ToString()) + (ringPosition > -1 ? ringPosition : 0)) % 26;
         result = inputScheme[offset];
       }
-
+      Debug.Write($"{encodedChar} --> {result} ");
       return result;
     }
 
@@ -141,7 +131,7 @@ namespace EnigmaMachine {
       }
 
       if (ringPosition == turnoverPosition) {
-        Debug.WriteLine($"{name} overTurn at {turnoverPosition}{inputScheme[turnoverPosition]}");
+        Debug.WriteLine($"{name} turnover at {turnoverPosition}({inputScheme[turnoverPosition]})");
         if (nextCylinder != null) {
           nextCylinder.IncreaseRingPositionAndCheckOverturn();
         }
