@@ -101,6 +101,9 @@ namespace EnigmaMachine {
         case "1":
           EncodeLetters();
           break;
+        case "2":
+          DecodeLetters();
+          break;
         case "exit":
           userWantsToExit = true;
           break;
@@ -121,6 +124,26 @@ namespace EnigmaMachine {
 
         originalMessage += result;
         encodedMessage += enigmaMachine.Encoder(result);
+      }
+
+      enigmaMachine.ResetMachine();
+      originalMessage = encodedMessage = "";
+    }
+
+    public void DecodeLetters() {
+      originalMessage = encodedMessage = "";
+
+      ConsoleKeyInfo userInput;
+
+      while ((userInput = ShowPromptAndReadCommandChar("Dec")).Key != ConsoleKey.OemMinus) {
+        char result;
+        result = char.ToUpper(userInput.KeyChar);
+        if (result < 'A' || result > 'Z') {
+          continue;
+        }
+
+        originalMessage += result;
+        encodedMessage += enigmaMachine.Decoder(result);
       }
 
       enigmaMachine.ResetMachine();

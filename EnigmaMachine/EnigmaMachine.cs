@@ -27,30 +27,55 @@ namespace EnigmaMachine {
       rotor3.ResetCylinder();
     }
 
-    public char Encoder(char original) {
-      char result = original;
+    public char Encoder(char message) {
+      char encodedResult = message;
 
-      Debug.Write($"(R1) {result} --> ");
-      result = rotor1.Encode(result);
-      Debug.Write($"{result}\n{result} --> ");
-      result = rotor2.Encode(result);
-      Debug.Write($"result}\n(R2) {result} --> ");
-      result = rotor3.Encode(result);
-      Debug.Write($"result}\n(R3) {result} --> ");
-      result = reflector.Encode(result);
-      Debug.Write($"result}\n(UKW) {result} --> ");
-      result = rotor3.Encode(result);
-      Debug.Write($"result}\n(R3) {result} --> ");
-      result = rotor2.Encode(result);
-      Debug.Write($"result}\n(R2) {result} --> ");
-      result = rotor1.Encode(result);
-      Debug.Write($"result}\n(R1) {result} --> ");
+      Debug.Write($"(R1) {encodedResult} --> ");
+      encodedResult = rotor1.Encode(encodedResult);
+      Debug.Write($"{encodedResult}\n{encodedResult} --> ");
+      //result = rotor2.Encode(result);
+      //Debug.Write($"result}\n(R2) {result} --> ");
+      //result = rotor3.Encode(result);
+      //Debug.Write($"result}\n(R3) {result} --> ");
+      encodedResult = reflector.Encode(encodedResult);
+      Debug.Write($"{encodedResult}\n(UKW) {encodedResult} --> ");
+      //result = rotor3.Encode(result);
+      //Debug.Write($"result}\n(R3) {result} --> ");
+      //result = rotor2.Encode(result);
+      //Debug.Write($"result}\n(R2) {result} --> ");
+      encodedResult = rotor1.Encode(encodedResult);
+      Debug.Write($"{encodedResult}\n(R1) {encodedResult} --> ");
 
-      rotor1.IncreaseRingPositionAndCheckOverturn();
+      //rotor1.IncreaseRingPositionAndCheckOverturn();
 
-      return result;
+      return encodedResult;
+    }
+    public char Decoder(char message) {
+      char decodedResult = message;
+
+      Debug.Write($"(R1) {decodedResult} --> ");
+      decodedResult = rotor1.Decode(decodedResult);
+      Debug.Write($"{decodedResult}\n{decodedResult} --> ");
+      //result = rotor2.Encode(result);
+      //Debug.Write($"result}\n(R2) {result} --> ");
+      //result = rotor3.Encode(result);
+      //Debug.Write($"result}\n(R3) {result} --> ");
+      decodedResult = reflector.Decode(decodedResult);
+      Debug.Write($"{decodedResult}\n(UKW) {decodedResult} --> ");
+      //result = rotor3.Encode(result);
+      //Debug.Write($"result}\n(R3) {result} --> ");
+      //result = rotor2.Encode(result);
+      //Debug.Write($"result}\n(R2) {result} --> ");
+      decodedResult = rotor1.Decode(decodedResult);
+      Debug.Write($"{decodedResult}\n(R1) {decodedResult} --> ");
+
+      //rotor1.IncreaseRingPositionAndCheckOverturn();
+
+      return decodedResult;
     }
   }
+
+  
 
   /// <summary>
   /// Model for base cylinder (should be refactored to real base cylinder and other types inheriting from it)
@@ -89,11 +114,22 @@ namespace EnigmaMachine {
 
     public char Encode(char original) {
       char result = ' ';
-     
-      if(original >= 'A' && original <= 'Z') {
-        int offset = (inputScheme.IndexOf(original.ToString()) + (ringPosition>-1?ringPosition:0)) % 26;
+
+      if (original >= 'A' && original <= 'Z') {
+        int offset = (inputScheme.IndexOf(original.ToString()) + (ringPosition > -1 ? ringPosition : 0)) % 26;
         result = outputScheme[offset];
       }
+      return result;
+    }
+
+    public char Decode(char encodedChar) {
+      char result = ' ';
+
+      if(encodedChar >= 'A' && encodedChar <= 'Z') {
+        int offset = (outputScheme.IndexOf(encodedChar.ToString()) + (ringPosition > -1 ? ringPosition : 0)) % 26;
+        result = inputScheme[offset];
+      }
+
       return result;
     }
 
@@ -104,13 +140,13 @@ namespace EnigmaMachine {
         ringPosition %= 26;
       }
 
-      if(ringPosition == turnoverPosition) {
+      if (ringPosition == turnoverPosition) {
         Debug.WriteLine($"{name} overTurn at {turnoverPosition}{inputScheme[turnoverPosition]}");
         if (nextCylinder != null) {
           nextCylinder.IncreaseRingPositionAndCheckOverturn();
         }
       }
-      
+
     }
   }
 }
