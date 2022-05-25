@@ -44,14 +44,20 @@ namespace EnigmaMachine {
       char encodedResult = message;
 
       for(int i = 0; i < cylinders.Count; i++) {
+        if (!cylinders[i].IsActive) {
+          continue;
+        }
         encodedResult = cylinders[i].Encode(encodedResult);
       }
       
       for (int i = cylinders.Count - 2; i >= 0; i--) {
+        if (!cylinders[i].IsActive) {
+          continue;
+        }
         encodedResult = cylinders[i].Encode(encodedResult);
       }
 
-      cylinders[0].IncreaseRingPositionAndCheckOverturn();
+      cylinders[1].IncreaseRingPositionAndCheckOverturn();
 
       return encodedResult;
     }
@@ -59,14 +65,20 @@ namespace EnigmaMachine {
       char decodedResult = message;
 
       for (int i = 0; i < cylinders.Count; i++) {
+        if (!cylinders[i].IsActive) {
+          continue;
+        }
         decodedResult = cylinders[i].Decode(decodedResult);
       }
 
       for (int i = cylinders.Count - 2; i >= 0; i--) {
+        if (!cylinders[i].IsActive) {
+          continue;
+        }
         decodedResult = cylinders[i].Decode(decodedResult);
       }
 
-      cylinders[0].IncreaseRingPositionAndCheckOverturn();
+      cylinders[1].IncreaseRingPositionAndCheckOverturn();
 
       return decodedResult;
     }
@@ -94,6 +106,7 @@ namespace EnigmaMachine {
     public string InputScheme { get => inputScheme; set => inputScheme = value; }
     public string OutputScheme { get => outputScheme; set => outputScheme = value; }
     public int StartPosition { get => startPosition; set => startPosition = value; }
+    public bool IsActive { get => isActive; set => isActive = value; }
 
     public Cylinder(string name, int startPosition, string outputScheme, int turnoverPosition) {
       this.Name = name;

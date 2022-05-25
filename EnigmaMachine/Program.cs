@@ -15,6 +15,9 @@ namespace EnigmaMachine
         new int[] { 16, 26, 8}, 
         EnigmaConfig.PLUGBOARD_DAY_29
       );
+
+      //enigmaMachine.cylinders[0].IsActive = false;
+
       consoleGUI = new ConsoleGUI(enigmaMachine);
 
       do {

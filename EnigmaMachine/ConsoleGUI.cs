@@ -98,6 +98,9 @@ namespace EnigmaMachine {
 
     public void ShowInformations(int x, int y) {
       for(int i = 0; i < enigmaMachine.cylinders.Count; i++) {
+        if (!enigmaMachine.cylinders[i].IsActive) {
+          continue;
+        }
         DrawCylinder(enigmaMachine.cylinders[i], 0, y + (i * 5));
       }
     }
