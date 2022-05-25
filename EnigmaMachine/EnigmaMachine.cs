@@ -8,13 +8,15 @@ namespace EnigmaMachine {
     private string name;
 
     public List<Cylinder> cylinders = new List<Cylinder>();
-    public Cylinder entry_wheel, reflector;
     public string Name { get => name; set => name = value; }
     
     public EnigmaMachine(string name, string[] rotorNames, int[] ringPositions, string plugboardConfig) {
       this.Name = name;
-      this.entry_wheel = new Cylinder("entry_wheel", 0, EnigmaConfig.TransformSwitchedPlugsToAlphabet(plugboardConfig), 0);
-      
+
+      cylinders.Add(
+        new Cylinder("Entry Wheel", 0, EnigmaConfig.TransformSwitchedPlugsToAlphabet(plugboardConfig), 0)
+      );
+
       for(int i = 0; i < rotorNames.Length; i++) {
         cylinders.Add(
           new Cylinder(
@@ -25,8 +27,7 @@ namespace EnigmaMachine {
           )
         );
       }
-      
-      this.reflector = new Cylinder("Reflector", 0, EnigmaConfig.TransformSwitchedPlugsToAlphabet(EnigmaConfig.REFLECTOR_A), 0);
+      cylinders.Add(new Cylinder("Reflector", 0, EnigmaConfig.TransformSwitchedPlugsToAlphabet(EnigmaConfig.REFLECTOR_A), 0));
 
       for(int i = 0; i < cylinders.Count - 1; i++) {
         cylinders[i].ConnectNextRotor(cylinders[i + 1]);
@@ -42,15 +43,13 @@ namespace EnigmaMachine {
     public char Encoder(char message) {
       char encodedResult = message;
 
-      encodedResult = entry_wheel.Encode(encodedResult);
       for(int i = 0; i < cylinders.Count; i++) {
         encodedResult = cylinders[i].Encode(encodedResult);
       }
-      encodedResult = reflector.Encode(encodedResult);
-      for (int i = cylinders.Count - 1; i >= 0; i--) {
+      
+      for (int i = cylinders.Count - 2; i >= 0; i--) {
         encodedResult = cylinders[i].Encode(encodedResult);
       }
-      encodedResult = entry_wheel.Encode(encodedResult);
 
       cylinders[0].IncreaseRingPositionAndCheckOverturn();
 
@@ -59,15 +58,13 @@ namespace EnigmaMachine {
     public char Decoder(char message) {
       char decodedResult = message;
 
-      decodedResult = entry_wheel.Decode(decodedResult);
       for (int i = 0; i < cylinders.Count; i++) {
         decodedResult = cylinders[i].Decode(decodedResult);
       }
-      decodedResult = reflector.Decode(decodedResult);
-      for (int i = cylinders.Count - 1; i >= 0; i--) {
+
+      for (int i = cylinders.Count - 2; i >= 0; i--) {
         decodedResult = cylinders[i].Decode(decodedResult);
       }
-      decodedResult = entry_wheel.Decode(decodedResult);
 
       cylinders[0].IncreaseRingPositionAndCheckOverturn();
 

@@ -97,12 +97,9 @@ namespace EnigmaMachine {
     }
 
     public void ShowInformations(int x, int y) {
-      DrawCylinder(enigmaMachine.entry_wheel, 0, y);
-
       for(int i = 0; i < enigmaMachine.cylinders.Count; i++) {
-        DrawCylinder(enigmaMachine.cylinders[i], 0, y + (i * 5) + 4);
+        DrawCylinder(enigmaMachine.cylinders[i], 0, y + (i * 5));
       }
-      DrawCylinder(enigmaMachine.reflector, 0, y + 19);
     }
 
     public void DrawCylinder(Cylinder cylinder, int x, int y) {
