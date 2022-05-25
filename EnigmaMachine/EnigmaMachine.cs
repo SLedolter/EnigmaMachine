@@ -87,6 +87,7 @@ namespace EnigmaMachine {
     private string inputScheme;
     private string outputScheme;
     private int startPosition;
+    private bool isActive = true;
 
     public Cylinder previousCylinder, nextCylinder;
 
