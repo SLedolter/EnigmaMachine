@@ -57,7 +57,7 @@ namespace EnigmaMachine {
         encodedResult = cylinders[i].Encode(encodedResult, false);
       }
 
-      cylinders[1].IncreaseStrikeCountAndRingPositionAndCheckOverturn();
+      cylinders[0].IncreaseStrikeCountAndRingPositionAndCheckOverturn();
 
       return encodedResult;
     }
@@ -191,7 +191,9 @@ namespace EnigmaMachine {
           nextCylinder.IncreaseStrikeCountAndRingPositionAndCheckOverturn();
         }
       }
-
+      if(nextCylinder != null) {
+        nextCylinder.IncreaseStrikeCountAndRingPositionAndCheckOverturn();
+      }
     }
   }
 }
