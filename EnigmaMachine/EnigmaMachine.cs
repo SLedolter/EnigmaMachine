@@ -68,14 +68,14 @@ namespace EnigmaMachine {
         if (!cylinders[i].IsActive) {
           continue;
         }
-        decodedResult = cylinders[i].Decode(decodedResult);
+        decodedResult = cylinders[i].Decode(decodedResult, true);
       }
 
       for (int i = cylinders.Count - 2; i >= 0; i--) {
         if (!cylinders[i].IsActive) {
           continue;
         }
-        decodedResult = cylinders[i].Decode(decodedResult);
+        decodedResult = cylinders[i].Decode(decodedResult, false);
       }
 
       cylinders[1].IncreaseStrikeCountAndRingPositionAndCheckOverturn();
@@ -138,9 +138,10 @@ namespace EnigmaMachine {
     public void ResetCylinder() {
       RingPositionIndex = StartPosition;
       firstIndex = -1;
+      CurrentStrikeCount = 0;
     }
 
-    public char Encode(char original, bool beforeReflector = true) {
+    public char Encode(char original, bool beforeReflector) {
       char result = ' ';
       int offset = 0;
 
@@ -151,13 +152,13 @@ namespace EnigmaMachine {
           FirstIndex = offset;
         } else {
           SecondIndex = offset;
-        }         
+        }
       }
       Debug.Write($"{original} --> {result} {offset}");
       return result;
     }
 
-    public char Decode(char encodedChar) {
+    public char Decode(char encodedChar, bool beforeReflector) {
       char result = ' ';
       int offset = 0;
 
@@ -167,6 +168,11 @@ namespace EnigmaMachine {
           offset += 26;
         }
         result = InputScheme[offset];
+        if (beforeReflector) {
+          FirstIndex = offset;
+        } else {
+          SecondIndex = offset;
+        }
       }
       Debug.Write($"{encodedChar} --> {result} ");
       return result;

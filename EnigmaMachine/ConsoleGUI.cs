@@ -110,6 +110,9 @@ namespace EnigmaMachine {
       PlaceCursorWithinPadding(x + 0, y + yIndex++);
       Console.ForegroundColor = ConsoleColor.White;
       Console.Write($"{cylinder.Name}");
+      if(cylinder.Name == "Entry Wheel") {
+        Console.Write($" ({cylinder.CurrentStrikeCount})");
+      }
       if(cylinder.RingPositionIndex >= 0) {
         PlaceCursorWithinPadding(x + cylinder.RingPositionIndex, y + yIndex++);
         Console.Write("V");
