@@ -9,7 +9,7 @@ namespace EnigmaMachine {
 
     public List<Cylinder> cylinders = new List<Cylinder>();
     public string Name { get => name; set => name = value; }
-    
+
     public EnigmaMachine(string name, string[] rotorNames, int[] ringPositions, string plugboardConfig) {
       this.Name = name;
 
@@ -19,7 +19,7 @@ namespace EnigmaMachine {
 
       for(int i = 0; i < rotorNames.Length; i++) {
         cylinders.Add(
-          new Cylinder(
+          new Cylinder( 
             "Rotor" + rotorNames[i], 
             ringPositions[i], 
             (string)typeof(EnigmaConfig).GetField("CYLINDER_"+rotorNames[i]).GetValue(null), 
@@ -47,14 +47,14 @@ namespace EnigmaMachine {
         if (!cylinders[i].IsActive) {
           continue;
         }
-        encodedResult = cylinders[i].Encode(encodedResult);
+        encodedResult = cylinders[i].Encode(encodedResult, true); 
       }
       
       for (int i = cylinders.Count - 2; i >= 0; i--) {
         if (!cylinders[i].IsActive) {
           continue;
         }
-        encodedResult = cylinders[i].Encode(encodedResult);
+        encodedResult = cylinders[i].Encode(encodedResult, false);
       }
 
       cylinders[1].IncreaseRingPositionAndCheckOverturn();
@@ -97,6 +97,9 @@ namespace EnigmaMachine {
     private string outputScheme;
     private int startPosition;
     private bool isActive = true;
+    private bool hasFixRingposition = false;
+    private int firstIndex = -1;
+    private int secondIndex = -1;
 
     public Cylinder previousCylinder, nextCylinder;
 
@@ -107,6 +110,9 @@ namespace EnigmaMachine {
     public string OutputScheme { get => outputScheme; set => outputScheme = value; }
     public int StartPosition { get => startPosition; set => startPosition = value; }
     public bool IsActive { get => isActive; set => isActive = value; }
+    public bool HasFixRingposition { get => hasFixRingposition; set => hasFixRingposition = value; }
+    public int FirstIndex { get => firstIndex; set => firstIndex = value; }
+    public int SecondIndex { get => secondIndex; set => secondIndex = value; }
 
     public Cylinder(string name, int startPosition, string outputScheme, int turnoverPosition) {
       this.Name = name;
@@ -128,15 +134,21 @@ namespace EnigmaMachine {
 
     public void ResetCylinder() {
       RingPositionIndex = StartPosition;
+      firstIndex = -1;
     }
 
-    public char Encode(char original) {
+    public char Encode(char original, bool beforeReflector = true) {
       char result = ' ';
       int offset = 0;
 
       if (original >= 'A' && original <= 'Z') {
         offset = (InputScheme.IndexOf(original.ToString()) + (RingPositionIndex > -1 ? RingPositionIndex : 0)) % 26;
         result = OutputScheme[offset];
+        if(beforeReflector) {
+          FirstIndex = offset;
+        } else {
+          SecondIndex = offset;
+        }         
       }
       Debug.Write($"{original} --> {result} {offset}");
       return result;

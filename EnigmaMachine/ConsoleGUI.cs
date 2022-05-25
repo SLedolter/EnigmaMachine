@@ -108,6 +108,7 @@ namespace EnigmaMachine {
     public void DrawCylinder(Cylinder cylinder, int x, int y) {
       int yIndex = 0;
       PlaceCursorWithinPadding(x + 0, y + yIndex++);
+      Console.ForegroundColor = ConsoleColor.White;
       Console.Write($"{cylinder.Name}");
       if(cylinder.RingPositionIndex >= 0) {
         PlaceCursorWithinPadding(x + cylinder.RingPositionIndex, y + yIndex++);
@@ -115,8 +116,31 @@ namespace EnigmaMachine {
       }
       PlaceCursorWithinPadding(x + 0, y + yIndex++);
       Console.Write(cylinder.InputScheme);
+      if(cylinder.FirstIndex > -1) {
+        Console.ForegroundColor = ConsoleColor.Green;
+        PlaceCursorWithinPadding(x + cylinder.FirstIndex, y + yIndex-1);
+        Console.Write(cylinder.InputScheme[cylinder.FirstIndex]);
+      }
+      if (cylinder.SecondIndex > -1) {
+        Console.ForegroundColor = ConsoleColor.Red;
+        PlaceCursorWithinPadding(x + cylinder.SecondIndex, y + yIndex - 1);
+        Console.Write(cylinder.InputScheme[cylinder.SecondIndex]);
+      }
+
+      Console.ForegroundColor = ConsoleColor.White;
       PlaceCursorWithinPadding(x + 0, y + yIndex++);
       Console.Write(cylinder.OutputScheme);
+      if (cylinder.FirstIndex > -1) {
+        Console.ForegroundColor = ConsoleColor.Green;
+        PlaceCursorWithinPadding(x + cylinder.FirstIndex, y + yIndex - 1);
+        Console.Write(cylinder.OutputScheme[cylinder.FirstIndex]);
+      }
+      if (cylinder.SecondIndex > -1) {
+        Console.ForegroundColor = ConsoleColor.Red;
+        PlaceCursorWithinPadding(x + cylinder.SecondIndex, y + yIndex - 1);
+        Console.Write(cylinder.OutputScheme[cylinder.SecondIndex]);
+      }
+      Console.ForegroundColor = ConsoleColor.White;
     }
 
     public void ShowMessages(int x, int y) {
