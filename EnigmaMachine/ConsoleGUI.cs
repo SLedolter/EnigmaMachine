@@ -131,7 +131,7 @@ namespace EnigmaMachine {
       PlaceCursorWithinPadding(x + 0, y + yIndex++);
       Console.Write(cylinder.OutputScheme);
       if (cylinder.FirstIndex > -1) {
-        Console.ForegroundColor = ConsoleColor.Green;
+        Console.ForegroundColor = ConsoleColor.Green  ;
         PlaceCursorWithinPadding(x + cylinder.FirstIndex, y + yIndex - 1);
         Console.Write(cylinder.OutputScheme[cylinder.FirstIndex]);
       }

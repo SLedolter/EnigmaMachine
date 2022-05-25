@@ -116,7 +116,8 @@ namespace EnigmaMachine {
 
     public Cylinder(string name, int startPosition, string outputScheme, int turnoverPosition) {
       this.Name = name;
-      this.RingPositionIndex = this.StartPosition = startPosition - 1;
+      this.RingPositionIndex = 0;
+      this.StartPosition = startPosition - 1;
       this.TurnoverPosition = turnoverPosition - 1;
       InputScheme = EnigmaConfig.ALPHABET;
       this.OutputScheme = outputScheme;
