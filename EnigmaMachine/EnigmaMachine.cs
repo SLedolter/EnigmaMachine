@@ -16,6 +16,7 @@ namespace EnigmaMachine {
       cylinders.Add(
         new Cylinder("Entry Wheel", 0, EnigmaConfig.TransformSwitchedPlugsToAlphabet(plugboardConfig), 0)
       );
+      cylinders[cylinders.Count-1].HasFixRingposition = true;
 
       for(int i = 0; i < rotorNames.Length; i++) {
         cylinders.Add(
@@ -28,8 +29,9 @@ namespace EnigmaMachine {
         );
       }
       cylinders.Add(new Cylinder("Reflector", 0, EnigmaConfig.TransformSwitchedPlugsToAlphabet(EnigmaConfig.REFLECTOR_A), 0));
+      cylinders[cylinders.Count - 1].HasFixRingposition = true;
 
-      for(int i = 0; i < cylinders.Count - 1; i++) {
+      for (int i = 0; i < cylinders.Count - 1; i++) {
         cylinders[i].ConnectNextRotor(cylinders[i + 1]);
       }
     }
@@ -146,7 +148,7 @@ namespace EnigmaMachine {
       int offset = 0;
 
       if (original >= 'A' && original <= 'Z') {
-        offset = (InputScheme.IndexOf(original.ToString()) + (RingPositionIndex > -1 ? CurrentStrikeCount : 0)) % 26;
+        offset = (InputScheme.IndexOf(original.ToString()) + (!HasFixRingposition ? CurrentStrikeCount : 0)) % 26;
         result = OutputScheme[offset];
         if(beforeReflector) {
           FirstIndex = offset;
@@ -163,7 +165,7 @@ namespace EnigmaMachine {
       int offset = 0;
 
       if(encodedChar >= 'A' && encodedChar <= 'Z') {
-        offset = (OutputScheme.IndexOf(encodedChar.ToString()) - (RingPositionIndex > -1 ? CurrentStrikeCount : 0));
+        offset = (OutputScheme.IndexOf(encodedChar.ToString()) - (!HasFixRingposition ? CurrentStrikeCount : 0));
         if(offset < 0) {
           offset += 26;
         }
@@ -187,6 +189,8 @@ namespace EnigmaMachine {
 
       if (RingPositionIndex == TurnoverPosition) {
         Debug.WriteLine($"{Name} turnover at {TurnoverPosition}({InputScheme[TurnoverPosition]})");
+      } else {
+
       }
       if(nextCylinder != null) {
         nextCylinder.IncreaseStrikeCountAndRingPositionAndCheckOverturn();
