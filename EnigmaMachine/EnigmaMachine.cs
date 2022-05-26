@@ -187,9 +187,6 @@ namespace EnigmaMachine {
 
       if (RingPositionIndex == TurnoverPosition) {
         Debug.WriteLine($"{Name} turnover at {TurnoverPosition}({InputScheme[TurnoverPosition]})");
-        if (nextCylinder != null) {
-          nextCylinder.IncreaseStrikeCountAndRingPositionAndCheckOverturn();
-        }
       }
       if(nextCylinder != null) {
         nextCylinder.IncreaseStrikeCountAndRingPositionAndCheckOverturn();
