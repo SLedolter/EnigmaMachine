@@ -80,7 +80,7 @@ namespace EnigmaMachine {
         decodedResult = cylinders[i].Decode(decodedResult, false);
       }
 
-      cylinders[1].IncreaseStrikeCountAndRingPositionAndCheckOverturn();
+      cylinders[0].IncreaseStrikeCountAndRingPositionAndCheckOverturn();
 
       return decodedResult;
     }
@@ -181,19 +181,23 @@ namespace EnigmaMachine {
     }
 
     public void IncreaseStrikeCountAndRingPositionAndCheckOverturn() {
-      RingPositionIndex++;
       CurrentStrikeCount++;
+      CurrentStrikeCount %= 26;
+
+      if (HasFixRingposition) {
+        nextCylinder.IncreaseStrikeCountAndRingPositionAndCheckOverturn();
+        return;
+      }
+
+      RingPositionIndex++;
       Debug.WriteLine($"nRP: {RingPositionIndex} {Name}");
       RingPositionIndex %= 26;
-      CurrentStrikeCount %= 26;
 
       if (RingPositionIndex == TurnoverPosition) {
         Debug.WriteLine($"{Name} turnover at {TurnoverPosition}({InputScheme[TurnoverPosition]})");
-      } else {
-
-      }
-      if(nextCylinder != null) {
-        nextCylinder.IncreaseStrikeCountAndRingPositionAndCheckOverturn();
+        if (nextCylinder != null) {
+          nextCylinder.IncreaseStrikeCountAndRingPositionAndCheckOverturn();
+        } 
       }
     }
   }

@@ -92,6 +92,16 @@ namespace EnigmaMachine {
         Console.CursorLeft = i;
         Console.Write("-");
       }
+
+      Console.CursorLeft = 2;
+      Console.CursorTop = Console.WindowHeight - COMMAND_AREA_HEIGHT - 1;
+      Console.WriteLine($"1 - Encode | 2 - Decode | - - exits En-/Decoding | exit - Exit");
+
+      Console.CursorTop = Console.WindowHeight - COMMAND_AREA_HEIGHT - 2;
+      for (int i = 0; i < Console.WindowWidth; i++) {
+        Console.CursorLeft = i;
+        Console.Write("-");
+      }
       PlaceCursorWithinPadding(0, Console.WindowHeight - COMMAND_AREA_HEIGHT);
       Console.Write($"{currentMenuShortname}>> ");
     }
@@ -127,7 +137,7 @@ namespace EnigmaMachine {
         Console.Write(cylinder.InputScheme[cylinder.SecondIndex]);
       }
 
-      Console.ForegroundColor = ConsoleColor.White;
+      Console.ForegroundColor = ConsoleColor.White; 
       PlaceCursorWithinPadding(x + 0, y + yIndex++);
       Console.Write(cylinder.OutputScheme);
       if (cylinder.FirstIndex > -1) {
