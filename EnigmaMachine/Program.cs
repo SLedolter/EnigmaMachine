@@ -9,7 +9,7 @@ namespace EnigmaMachine
 
     static void Main(string[] args)
     {
-      enigmaMachine = EnigmaMachineFactory.NoPlugboardMachineWithFixedRingposition();
+      enigmaMachine = EnigmaMachineFactory.Rotor3OnlyForTesting();
 
       consoleGUI = new ConsoleGUI(enigmaMachine);
 

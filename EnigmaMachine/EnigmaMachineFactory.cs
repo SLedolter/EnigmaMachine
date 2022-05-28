@@ -17,14 +17,23 @@ namespace EnigmaMachine {
     public static EnigmaMachine NoPlugboardMachineWithFixedRingposition() {
       EnigmaMachine enigmaMachine = new EnigmaMachine(
         "NoPlugboardMachine",
-        new string[] { "1", "2", "3" },
-        new int[] { -1, -1, -1 },
+        new string[] { "3", "2", "1" },
+        new int[] { 0, 0, 0 },
         null
       );
       foreach(Cylinder cylinder in enigmaMachine.cylinders) {
         cylinder.HasFixRingposition = true;
       }
       return enigmaMachine;
+    }
+
+    public static EnigmaMachine Rotor3OnlyForTesting() {
+      return new EnigmaMachine(
+        "Rotor3Only",
+        new string[] { "3" },
+        new int[] { 16 },
+        null
+      );
     }
   }
 }

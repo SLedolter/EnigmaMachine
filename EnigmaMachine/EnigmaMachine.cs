@@ -10,7 +10,7 @@ namespace EnigmaMachine {
     public List<Cylinder> cylinders = new List<Cylinder>();
     public string Name { get => name; set => name = value; }
 
-    public EnigmaMachine(string name, string[] rotorNames, int[] ringPositions, string plugboardConfig) {
+    public EnigmaMachine(string name, string[] rotorNames, int[] ringPositions, string plugboardConfig, string reflector) {
       this.Name = name;
 
       cylinders.Add(
@@ -28,7 +28,13 @@ namespace EnigmaMachine {
           )
         );
       }
-      cylinders.Add(new Cylinder("Reflector", 0, EnigmaConfig.TransformSwitchedPlugsToAlphabet(EnigmaConfig.REFLECTOR_A), 0));
+      cylinders.Add(
+        new Cylinder("Reflector", 
+          0, 
+          EnigmaConfig.TransformSwitchedPlugsToAlphabet(EnigmaConfig.REFLECTOR_A), 
+          0
+        )
+      );
       cylinders[cylinders.Count - 1].HasFixRingposition = true;
 
       for (int i = 0; i < cylinders.Count - 1; i++) {
