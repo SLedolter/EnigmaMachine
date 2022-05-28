@@ -52,12 +52,15 @@ namespace EnigmaMachine {
     public const string REFLECTOR_C_NARROW_SOLUTION = "RDOBJNTKVEHMLFCWZAXGYIPSUQ";
 
     public static string TransformSwitchedPlugsToAlphabet(string plugboardOrder) {
+      if(plugboardOrder == null) {
+        return ALPHABET;
+      }
       string result = EnigmaConfig.ALPHABET;
       int index1, index2;
       char char1, char2;
 
       foreach (string pair in plugboardOrder.Trim().Split(" ")) {
-        index1 = result.IndexOf(pair[0]);
+       index1 = result.IndexOf(pair[0]);
         char1 = result[index1];
         index2 = result.IndexOf(pair[1]);
         char2 = result[index2];

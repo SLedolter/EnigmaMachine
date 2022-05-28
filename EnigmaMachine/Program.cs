@@ -9,14 +9,7 @@ namespace EnigmaMachine
 
     static void Main(string[] args)
     {
-      enigmaMachine = new EnigmaMachine(
-        "MyEnigmaMachine", 
-        new string[] { "1", "4", "3" }, 
-        new int[] { 16, 26, 8}, 
-        EnigmaConfig.PLUGBOARD_DAY_29
-      );
-
-      //enigmaMachine.cylinders[0].IsActive = false;
+      enigmaMachine = EnigmaMachineFactory.NoPlugboardMachineWithFixedRingposition();
 
       consoleGUI = new ConsoleGUI(enigmaMachine);
 

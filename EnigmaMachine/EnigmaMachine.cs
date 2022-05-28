@@ -184,7 +184,7 @@ namespace EnigmaMachine {
       CurrentStrikeCount++;
       CurrentStrikeCount %= 26;
 
-      if (HasFixRingposition) {
+      if (!HasFixRingposition) {
         nextCylinder.IncreaseStrikeCountAndRingPositionAndCheckOverturn();
         return;
       }
