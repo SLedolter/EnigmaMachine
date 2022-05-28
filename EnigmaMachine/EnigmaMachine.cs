@@ -28,14 +28,16 @@ namespace EnigmaMachine {
           )
         );
       }
-      cylinders.Add(
-        new Cylinder("Reflector", 
-          0, 
-          EnigmaConfig.TransformSwitchedPlugsToAlphabet(EnigmaConfig.REFLECTOR_A), 
+      if(reflector != null) {
+        cylinders.Add(
+        new Cylinder("Reflector",
+          0,
+          EnigmaConfig.TransformSwitchedPlugsToAlphabet((string)typeof(EnigmaConfig).GetField("REFLECTOR_" + reflector).GetValue(null)),
           0
         )
       );
-      cylinders[cylinders.Count - 1].HasFixRingposition = true;
+        cylinders[cylinders.Count - 1].HasFixRingposition = true; 
+      }
 
       for (int i = 0; i < cylinders.Count - 1; i++) {
         cylinders[i].ConnectNextRotor(cylinders[i + 1]);

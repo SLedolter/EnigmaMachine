@@ -10,7 +10,8 @@ namespace EnigmaMachine {
         "Day29Machine",
         new string[] { "1", "4", "3" },
         new int[] { 16, 26, 8 },
-        EnigmaConfig.PLUGBOARD_DAY_29
+        EnigmaConfig.PLUGBOARD_DAY_29,
+        "A"
       );
     }
 
@@ -19,7 +20,8 @@ namespace EnigmaMachine {
         "NoPlugboardMachine",
         new string[] { "3", "2", "1" },
         new int[] { 0, 0, 0 },
-        null
+        null,
+        "A"
       );
       foreach(Cylinder cylinder in enigmaMachine.cylinders) {
         cylinder.HasFixRingposition = true;
@@ -32,6 +34,7 @@ namespace EnigmaMachine {
         "Rotor3Only",
         new string[] { "3" },
         new int[] { 16 },
+        null,
         null
       );
     }

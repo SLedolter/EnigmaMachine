@@ -9,7 +9,7 @@ namespace EnigmaMachine
 
     static void Main(string[] args)
     {
-      enigmaMachine = EnigmaMachineFactory.Rotor3OnlyForTesting();
+      enigmaMachine = EnigmaMachineFactory.Day29Machine();
 
       consoleGUI = new ConsoleGUI(enigmaMachine);
 
