@@ -207,7 +207,7 @@ namespace EnigmaMachine {
         }
 
         originalMessage += result;
-        encodedMessage += enigmaMachine.Decoder(result);
+        encodedMessage += enigmaMachine.Encoder(result);
       }
 
       enigmaMachine.ResetMachine();

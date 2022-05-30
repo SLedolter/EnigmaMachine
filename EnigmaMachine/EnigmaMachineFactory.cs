@@ -6,19 +6,22 @@ namespace EnigmaMachine {
 
   public static class EnigmaMachineFactory {
     public static EnigmaMachine Day29Machine() {
-      return new EnigmaMachine(
+      EnigmaMachine enigmaMachine = 
+        new EnigmaMachine(
         "Day29Machine",
         new string[] { "1", "4", "3" },
         new int[] { 16, 26, 8 },
         EnigmaConfig.PLUGBOARD_DAY_29,
         "A"
       );
+
+      return enigmaMachine;
     }
 
     public static EnigmaMachine NoPlugboardMachineWithFixedRingposition() {
       EnigmaMachine enigmaMachine = new EnigmaMachine(
         "NoPlugboardMachine",
-        new string[] { "3", "2", "1" },
+        new string[] { "1", "2", "3" },
         new int[] { 0, 0, 0 },
         null,
         "A"

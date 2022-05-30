@@ -156,11 +156,13 @@ namespace EnigmaMachine {
       int offset = 0;
 
       if (original >= 'A' && original <= 'Z') {
-        offset = (InputScheme.IndexOf(original.ToString()) + (!HasFixRingposition ? CurrentStrikeCount : 0)) % 26;
-        result = OutputScheme[offset];
         if(beforeReflector) {
+          offset = (InputScheme.IndexOf(original.ToString()) + (!HasFixRingposition ? CurrentStrikeCount : 0)) % 26;
+          result = OutputScheme[offset];
           FirstIndex = offset;
         } else {
+          offset = (OutputScheme.IndexOf(original.ToString()) + (!HasFixRingposition ? CurrentStrikeCount : 0)) % 26;
+          result = InputScheme[offset];
           SecondIndex = offset;
         }
       }
@@ -192,14 +194,13 @@ namespace EnigmaMachine {
       CurrentStrikeCount++;
       CurrentStrikeCount %= 26;
 
-      if (!HasFixRingposition) {
-        nextCylinder.IncreaseStrikeCountAndRingPositionAndCheckOverturn();
-        return;
-      }
-
       RingPositionIndex++;
       Debug.WriteLine($"nRP: {RingPositionIndex} {Name}");
       RingPositionIndex %= 26;
+
+      if(name == "Entry Wheel") {
+        nextCylinder.IncreaseStrikeCountAndRingPositionAndCheckOverturn();
+      }
 
       if (RingPositionIndex == TurnoverPosition) {
         Debug.WriteLine($"{Name} turnover at {TurnoverPosition}({InputScheme[TurnoverPosition]})");
