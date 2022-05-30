@@ -170,26 +170,6 @@ namespace EnigmaMachine {
       return result;
     }
 
-    public char Decode(char encodedChar, bool beforeReflector) {
-      char result = ' ';
-      int offset = 0;
-
-      if(encodedChar >= 'A' && encodedChar <= 'Z') {
-        offset = (OutputScheme.IndexOf(encodedChar.ToString()) - (!HasFixRingposition ? CurrentStrikeCount : 0));
-        if(offset < 0) {
-          offset += 26;
-        }
-        result = InputScheme[offset];
-        if (beforeReflector) {
-          FirstIndex = offset;
-        } else {
-          SecondIndex = offset;
-        }
-      }
-      Debug.Write($"{encodedChar} --> {result} ");
-      return result;
-    }
-
     public void IncreaseStrikeCountAndRingPositionAndCheckOverturn() {
       CurrentStrikeCount++;
       CurrentStrikeCount %= 26;
